@@ -3,47 +3,19 @@ package cli
 // move to CLI folder and file
 import (
 	"fmt"
-	"github.com/jonahglover/deplo1/process"
+	"github.com/jonahglover/deplo1/client"
 	"github.com/urfave/cli"
-	"io/ioutil"
 	"os"
 )
 
-func startDaemon() (string, error) {
-	b, err := ioutil.ReadFile("/Users/jonah/.deplo1/deplo1.pid")
-	if err != nil {
-		return err
-	}
-
-	pid := string(b)
-
-	fmt.Println(pid)
-}
-
-func daemonize(c *cli.Context) error {
-	pid, err := startDaemon()
-}
-
 func run(c *cli.Context) error {
-	//	recipe, err := recipe.New(c.Args().Get(0))
-	//
-	//	if err != nil {
-	//		return err
-	//	}
-	//
-	//	err = process.New(recipe)
-	//
-	//	if err != nil {
-	//		return err
-	//	}
-
-	daemonize()
-
+	reply := client.Run(c.Args().Get(0))
+	fmt.Println(reply)
 	return nil
 }
 
 func list(c *cli.Context) error {
-	fmt.Println(process.ProcessList)
+	client.List()
 	return nil
 }
 
@@ -59,9 +31,9 @@ func RunCli() {
 			Action: run,
 		},
 		{
-			Name:   "daemonize",
-			Usage:  "deplo1 daemonize",
-			Action: daemonize,
+			Name:   "list",
+			Usage:  "deplo1 list",
+			Action: list,
 		},
 	}
 	app.Run(os.Args)
